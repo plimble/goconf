@@ -10,5 +10,5 @@ install:
    - go get ./...
 
 script:
-  - gotestcover -coverprofile="cover.out" -race -covermode="count" .
+  - gotestcover -coverprofile="cover.out" -covermode="count" .
   - goveralls -coverprofile="cover.out"
