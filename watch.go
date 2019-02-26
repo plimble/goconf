@@ -5,7 +5,6 @@ import (
 	"path/filepath"
 
 	"github.com/fsnotify/fsnotify"
-	"go.uber.org/zap"
 )
 
 type OnChange func() error
@@ -14,7 +13,7 @@ func WatchYamlFile(path string, v interface{}, onChange OnChange) {
 	go func() {
 		watcher, err := fsnotify.NewWatcher()
 		if err != nil {
-			zap.L().Fatal(err.Error())
+			log.Panic(err.Error())
 		}
 		defer watcher.Close()
 
@@ -30,11 +29,11 @@ func WatchYamlFile(path string, v interface{}, onChange OnChange) {
 						if event.Op&fsnotify.Write == fsnotify.Write || event.Op&fsnotify.Create == fsnotify.Create {
 							err := ReloadYaml(configFile, v)
 							if err != nil {
-								zap.L().Error(err.Error())
+								log.Println(err.Error())
 							}
 							if onChange != nil {
 								if err = onChange(); err != nil {
-									zap.L().Error(err.Error())
+									log.Println(err.Error())
 								}
 							}
 						}
